@@ -81,18 +81,21 @@ function procCmd(c) {
     switch (cmd) {
         case "help" : {
             var pageNo;
-            if (args.length == 0 || isNaN(args[0]))
+            if (args.length == 0) {
                 pageNo = 1;
-            else
+            }
+            else if (isNaN(args[0])) {
+                help(args[0]);
+                break;
+            }
+            else {
                 pageNo = parseInt(args[0]);
+            }
             helpPage(pageNo);
             break;
         }
         case "clear" : {
-            if (args[0] === "help") {
-                cmdTitle(cmd);
-                msg("Clears the chat log");
-            } else if (args.length == 0) {
+            if (args.length == 0) {
                 for (var i = 0; i < 20; i++) {
                     msg("\n");
                 }
@@ -102,21 +105,11 @@ function procCmd(c) {
             break;
         }
         case "showcoords" : {
-            if (args[0] === "help") {
-                cmdTitle(cmd);
-                msg("Turns on/off player coordinates");
-            } else {
-                showcoords = !showcoords;
-            }
+            showcoords = !showcoords;
             break;
         }
         case "addeffect" : {
-            if (args[0] === "help") {
-                cmdTitle(cmd);
-                msg("Adds potion effect to player");
-                msg("usage: /addeffect [potion effect] [seconds] [amplification=0]\n   [ambient=false] [showParticles=true]");
-                msg("Type /potions for a list of valid potion effects.")
-            } else if (args.length > 0 && potions.indexOf(args[0]) == -1) {
+            if (args.length > 0 && potions.indexOf(args[0]) == -1) {
                 err(args[0] + " is not a valid potion effect");
             } else if (args.length == 1) {
                 err("Invalid number of parameters. Type '/addeffect help' for usage help");
@@ -173,12 +166,6 @@ function procCmd(c) {
             break;
         }
         case "sethome" : {
-            if (args[0] === "help") {
-                cmdTitle(cmd);
-                msg("Sets the destination for the /home cmd");
-                break;
-            }
-
             ModPE.saveData("homePosX", parseInt(Player.getX()));
             ModPE.saveData("homePosY", parseInt(Player.getY()));
             ModPE.saveData("homePosZ", parseInt(Player.getZ()));
@@ -188,12 +175,7 @@ function procCmd(c) {
             break;
         }
         case "setspawn" : {
-            if (args[0] === "help") {
-                cmdTitle(cmd);
-                msg("Sets player spawn point");
-                msg("usage: /setspawn [x y z]")
-                break;
-            } else if (args.length == 3) {
+            if (args.length == 3) {
                 var valid = true;
                 args.forEach(function(v,i,r) {
                     if (isNaN(v)) {
@@ -215,11 +197,6 @@ function procCmd(c) {
             break;
         }
         case "home" : {
-            if (args[0] === "help") {
-                cmdTitle(cmd);
-                msg("Teleports the player to home (if set)");
-                break;
-            }
             if (ModPE.readData("homeSet") == null) {
                 err("Home not set. Use /sethome to do so")
                 break;
@@ -232,12 +209,6 @@ function procCmd(c) {
             break;
         }
         case 'tp': {
-            if(args[0] === "help"){
-                msg("Teleports you to specified pos");
-                msg("usage: /tp x y z [safe] (Warns if you will /tp into a block)");
-                break;
-            }
-
             if (args[0] == null || isNaN(args[0]) ||
                 args[1] == null || isNaN(args[1]) ||
                 args[2] == null || isNaN(args[2])) {
@@ -337,5 +308,48 @@ function helpPage(pageNo) {
     } else {
         err((pageNo + 1) + " is not a valid page number.");
     }
+    msg("\n Type '/help command' for help on each command");
+}
 
+function help(cmd) {
+    cmdTitle(cmd);
+    switch (cmd) {
+        case "clear" : {
+            msg("Clears the chat log");
+            break;
+        }
+        case "showcoords" : {
+            msg("Turns on/off player coordinates");
+            break;
+        }
+        case "addeffect" : {
+            msg("Adds potion effect to player");
+            msg("usage: /addeffect potionEffect seconds [amplification=0]\n   [ambient=false] [showParticles=true]");
+            msg("Type /potions for a list of valid potion effects.")
+            break;
+        }
+        case "potions" : {
+            msg("Shows list of potion effects for /addeffect command");
+            break;
+        }
+        case "sethome" : {
+            msg("Sets the destination for the /home command");
+            break;
+        }
+        case "setspawn" : {
+            msg("Sets level spawn point");
+            msg("usage: /setspawn [x y z]");
+            break;
+        }
+        case "home" : {
+            msg("Teleports the player to home (if set)");
+            break;
+        }
+        case "tp" : {
+            msg("Teleports you to specified pos");
+            msg("'safe' warns if you will /tp into a block");
+            msg("usage: /tp x y z [safe]");
+            break;
+        }
+    }
 }
