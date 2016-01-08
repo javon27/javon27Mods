@@ -1,6 +1,6 @@
 // Each line is a page for the help menu
 var pages = [
-    ["clear", "showcoords", "addeffect", "potions"],
+    ["clear", "showcoords", "addeffect", "potions", "direction"],
     ["sethome", "setspawn", "timeset", "tp"],
     ["effect", "explode", "fly", "forward", "gamemode"],
     ["gamespeed", "biome", "give", "heal", "home"],

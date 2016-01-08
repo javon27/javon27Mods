@@ -1,7 +1,8 @@
 # javon27Mods
 ## Minecraft Pocket Edition Mod Commands
 
-This script is my attempt to add commands to Minecraft Pocket Edition. I test it on Android MCPE 0.13.1.
+This script is my attempt to add commands to Minecraft Pocket Edition. Tested on Android MCPE 0.13.1.
+---
 
 ### Working Commands
 ### Help
@@ -102,3 +103,4 @@ This script is my attempt to add commands to Minecraft Pocket Edition. I test it
 /ride
 /biome
 /give
+/direction
