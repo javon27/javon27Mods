@@ -191,6 +191,7 @@ function procCmd(c) {
             if (args[0] === "help") {
                 cmdTitle(cmd);
                 msg("Sets player spawn point");
+                msg("usage: /setspawn [x y z]")
                 break;
             } else if (args.length == 3) {
                 var valid = true;
