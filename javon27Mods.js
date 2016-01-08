@@ -1,3 +1,4 @@
+// Each line is a page for the help menu
 var pages = [
     ["clear", "showcoords", "addeffect", "potions"],
     ["sethome", "setspawn", "timeset", "tp"],
@@ -6,7 +7,9 @@ var pages = [
     ["itemdata", "joinserver", "kill", "ride", "sethealth"]
 ];
 
+// Show player coordinates if set to true
 var showcoords = false;
+
 var potions = [
     "saturation",
     "absorption",
@@ -32,6 +35,7 @@ var potions = [
     "movementSlowdown",
     "movementSpeed"
 ];
+
 var potionObjs = [
     MobEffect.saturation,
     MobEffect.absorption,
@@ -59,8 +63,8 @@ var potionObjs = [
 ]
 
 function newLevel() {
-    msg("Welcome! Thanks for using javon27Mods");
-    msg("Type /help to see available list of commands\n");
+    msg(ChatColor.LIGHT_PURPLE + "Welcome! Thanks for using javon27Mods");
+    msg("Type /help to see available list of commands\n\n");
 }
 
 function modTick() {
