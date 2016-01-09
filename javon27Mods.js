@@ -298,16 +298,14 @@ function helpPage(pageNo) {
     pageNo = pageNo - 1;
 
     if (0 <= pageNo && pageNo < cmdPages.length) {
-        if (pageNo === 0) {
-            msg("For more help, type /help <command>");
-        }
-        msg("\n=== Help Page " + (pageNo+1) + " ===");
+        clientMessage(ChatColor.GREEN + "\n=== Help Page " + (pageNo+1) + " of " + cmdPages.length + " ===");
         cmdPages[pageNo].forEach(function(cmd,i,arg) {
             msg("/" + cmd);
         });
     } else {
         err((pageNo + 1) + " is not a valid page number.");
     }
+    msg("For more help, type /help <command>");
 }
 
 function help(cmd) {
