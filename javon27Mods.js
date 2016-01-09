@@ -171,12 +171,12 @@ function procCmd(c) {
         case "potions" : {
             var tmp = "";
             potions.forEach(function(potion, index, arg) {
-                tmp = tmp + potion + " ";
-                if ((index+1) % 5 == 0) {
-                    tmp = tmp + "\n";
+                tmp = tmp + potion + ", ";
+                if (index == (potions.length - 1) || tmp.length > 70) {
+                    msg(tmp);
+                    tmp = "";
                 }
             });
-            msg(tmp);
             break;
         }
         case "sethome" : {
