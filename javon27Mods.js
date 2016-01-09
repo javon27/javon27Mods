@@ -13,7 +13,7 @@ var position = false;
 // Shorten a few color names
 var CMD_COLOR = ChatColor.YELLOW;           // Color for command text
 var PARAM_COLOR = ChatColor.LIGHT_PURPLE;   // command parameters
-var OPT_COLOR = ChatColor.GREY;             // optional command parameters
+var OPT_COLOR = ChatColor.GRAY;             // optional command parameters
 var TXT_COLOR = ChatColor.WHITE;            // normal text
 
 var potions = [
@@ -316,7 +316,7 @@ function help(cmd) {
     switch (cmd) {
         case "addeffect" : {
             msg("Adds potion effect to player");
-            msg("usage: /addeffect <potionEffect> <seconds> [amplification=0]\n   [ambient=false] [showParticles=true]");
+            msg("usage: /addeffect <potionEffect> <seconds> [amplification=0] \n   [ambient=false] [showParticles=true]");
             msg("Type /potions for a list of valid potion effects.")
             break;
         }
