@@ -1,6 +1,6 @@
 // Each line is a page for the help menu
-var pages = [
-    ["clear", "showcoords", "addeffect", "potions", "direction"],
+var cmdPages = [
+    ["clear", "position", "addeffect", "potions", "direction"],
     ["sethome", "setspawn", "timeset", "tp"],
     ["effect", "explode", "fly", "forward", "gamemode"],
     ["gamespeed", "biome", "give", "heal", "home"],
@@ -8,7 +8,13 @@ var pages = [
 ];
 
 // Show player coordinates if set to true
-var showcoords = false;
+var position = false;
+
+// Shorten a few color names
+var CMD_COLOR = ChatColor.YELLOW;           // Color for command text
+var PARAM_COLOR = ChatColor.LIGHT_PURPLE;   // command parameters
+var OPT_COLOR = ChatColor.GREY;             // optional command parameters
+var TXT_COLOR = ChatColor.WHITE;            // normal text
 
 var potions = [
     "saturation",
@@ -63,12 +69,12 @@ var potionObjs = [
 ]
 
 function newLevel() {
-    msg(ChatColor.LIGHT_PURPLE + "Welcome! Thanks for using javon27Mods");
+    clientMessage(ChatColor.LIGHT_PURPLE + "Welcome! Thanks for using javon27Mods");
     msg("Type /help to see available list of commands\n\n");
 }
 
 function modTick() {
-    if (showcoords) {
+    if (position) {
         ModPE.showTipMessage("\n[x: "+Math.round(getPlayerX())+" y: "+Math.round(getPlayerY())+" z: "+Math.round(getPlayerZ())+"]");
     }
 }
@@ -79,6 +85,62 @@ function procCmd(c) {
     var args = line.slice(1);
 
     switch (cmd) {
+        case "addeffect" : {
+            if (args.length > 0 && potions.indexOf(args[0]) == -1) {
+                err(args[0] + " is not a valid potion effect");
+            } else if (args.length == 1) {
+                err("Invalid number of parameters. Type /help <addeffect> for usage help");
+            } else if (args.length > 1 && potions.indexOf(args[0]) > -1 && !isNaN(args[1])) {
+                var amplification = 0, ambient = false, showParticles = true;
+
+                if (args.length > 2) {
+                    if (!isNaN(args[2])) {
+                            amplification = args[2];
+                        } else {
+                            err("Type /help <addeffect> for help using this command");
+                            break;
+                        }
+                }
+                if (args.length > 3) {
+                    if (args[3] == "false") {
+                        ambient = false;
+                    } else if (args[3] == "true") {
+                        ambient = true;
+                    } else {
+                        err("Type /help <addeffect> for help using this command");
+                        break;
+                    }
+                }
+                if (args.length > 4) {
+                    if (args[4] == "false") {
+                        showParticles = false;
+                    } else if (args[4] == "true") {
+                        showParticles = true;
+                    } else {
+                        err("Type /help <addeffect> for help using this command");
+                        break;
+                    }
+                }
+                if (args.length > 5) {
+                    err("Type /help <addeffect> for help using this command");
+                    break;
+                }
+                Entity.addEffect(getPlayerEnt(), potionObjs[potions.indexOf(args[0])], parseInt(args[1])*20, 0, false, true);
+            } else {
+                err("Type /help <addeffect> for help using this command");
+            }
+            break;
+        }
+        case "clear" : {
+            if (args.length == 0) {
+                for (var i = 0; i < 20; i++) {
+                    msg("\n");
+                }
+            } else {
+                msg("Clear WHAT now?")
+            }
+            break;
+        }
         case "help" : {
             var pageNo;
             if (args.length == 0) {
@@ -94,71 +156,23 @@ function procCmd(c) {
             helpPage(pageNo);
             break;
         }
-        case "clear" : {
-            if (args.length == 0) {
-                for (var i = 0; i < 20; i++) {
-                    msg("\n");
-                }
-            } else {
-                msg("Clear WHAT now?")
+        case "home" : {
+            if (ModPE.readData("homeSet") == null) {
+                err("Home not set. Use /sethome to do so")
+                break;
             }
-            break;
-        }
-        case "showcoords" : {
-            showcoords = !showcoords;
-            break;
-        }
-        case "addeffect" : {
-            if (args.length > 0 && potions.indexOf(args[0]) == -1) {
-                err(args[0] + " is not a valid potion effect");
-            } else if (args.length == 1) {
-                err("Invalid number of parameters. Type '/addeffect help' for usage help");
-            } else if (args.length > 1 && potions.indexOf(args[0]) > -1 && !isNaN(args[1])) {
-                var amplification = 0, ambient = false, showParticles = true;
-
-                if (args.length > 2) {
-                    if (!isNaN(args[2])) {
-                            amplification = args[2];
-                        } else {
-                            err("Type '/addeffect help' for help using this command");
-                            break;
-                        }
-                }
-                if (args.length > 3) {
-                    if (args[3] == "false") {
-                        ambient = false;
-                    } else if (args[3] == "true") {
-                        ambient = true;
-                    } else {
-                        err("Type '/addeffect help' for help using this command");
-                        break;
-                    }
-                }
-                if (args.length > 4) {
-                    if (args[4] == "false") {
-                        showParticles = false;
-                    } else if (args[4] == "true") {
-                        showParticles = true;
-                    } else {
-                        err("Type '/addeffect help' for help using this command");
-                        break;
-                    }
-                }
-                if (args.length > 5) {
-                    err("Type '/addeffect help' for help using this command");
-                    break;
-                }
-                Entity.addEffect(getPlayerEnt(), potionObjs[potions.indexOf(args[0])], parseInt(args[1])*20, 0, false, true);
-            } else {
-                err("Type '/addeffect help' for help using this command");
-            }
+            Entity.setPosition(getPlayerEnt(),
+                               parseFloat(ModPE.readData("homePosX")) + 0.25,
+                               parseFloat(ModPE.readData("homePosY")) + 1.00,
+                               parseFloat(ModPE.readData("homePosZ")) + 0.25);
+            info("Teleported home");
             break;
         }
         case "potions" : {
             var tmp = "";
             potions.forEach(function(potion, index, arg) {
                 tmp = tmp + potion + " ";
-                if (index % 5 == 0) {
+                if ((index+1) % 5 == 0) {
                     tmp = tmp + "\n";
                 }
             });
@@ -171,7 +185,6 @@ function procCmd(c) {
             ModPE.saveData("homePosZ", parseInt(Player.getZ()));
             ModPE.saveData("homeSet", 1);
             info("Set Home at X:" + getPlayerX() + ", Y:" + getPlayerY() + ", Z:" + getPlayerZ());
-
             break;
         }
         case "setspawn" : {
@@ -179,7 +192,7 @@ function procCmd(c) {
                 var valid = true;
                 args.forEach(function(v,i,r) {
                     if (isNaN(v)) {
-                        err("Invalid parameters. Type '/setspawn help' for help using this command");
+                        err("Invalid parameters. Type /help <setspawn> for help using this command");
                         valid = false;
                     }
                 });
@@ -192,20 +205,12 @@ function procCmd(c) {
                 Level.setSpawn(getPlayerX(), getPlayerY(), getPlayerZ());
                 info("Spawn set to X:" + parseInt(getPlayerX()) + ", Y:" + parseInt(getPlayerY()) + ", Z:" + parseInt(getPlayerZ()));
             } else {
-                err("What? Type '/setspawn help' for help using this cmd");
+                err("What? Type /help <setspawn> for help using this cmd");
             }
             break;
         }
-        case "home" : {
-            if (ModPE.readData("homeSet") == null) {
-                err("Home not set. Use /sethome to do so")
-                break;
-            }
-            Entity.setPosition(getPlayerEnt(),
-                               parseFloat(ModPE.readData("homePosX")) + 0.25,
-                               parseFloat(ModPE.readData("homePosY")) + 1.00,
-                               parseFloat(ModPE.readData("homePosZ")) + 0.25);
-            info("Teleported home");
+        case "position" : {
+            position = !position;
             break;
         }
         case 'tp': {
@@ -252,7 +257,7 @@ function procCmd(c) {
         }
         default : {
             var keywordFound = false;
-            pages.forEach(function(v,i,r) {
+            cmdPages.forEach(function(v,i,r) {
                 if (v.indexOf(cmd) > -1) {
                     keywordFound = true;
                 }
@@ -266,66 +271,61 @@ function procCmd(c) {
     }
 }
 
-function msg(msg){
-    clientMessage(ChatColor.WHITE + msg);
+function msg(msg) {
+    var words = msg.split(" ");
+    words.forEach(function (word, i, arg) {
+        if ( /^\/(\w+)/ig.test(word) ) {
+            words[i] = CMD_COLOR + word;
+        } else if ( /^<\S+>$/.test(word) ) {
+            words[i] = PARAM_COLOR + word.replace(/<(\S+)>/, "$1");
+        } else if ( /^\[[\S\s]+\]$/.test(word) ) {
+            words[i] = OPT_COLOR + word;
+        } else {
+            words[i] = TXT_COLOR + word;
+        }
+    });
+    msg = words.join(" ");
+    clientMessage(msg);
 }
+function err(msg) { clientMessage(ChatColor.RED + "ERROR" + ChatColor.WHITE + " : " + msg); }
+function suc(msg) { clientMessage(ChatColor.GREEN + "SUCCESS" + ChatColor.WHITE + " : " + msg); }
+function info(msg) { clientMessage(ChatColor.YELLOW + "INFO" + ChatColor.WHITE + " : " + msg); }
+function warn(msg) { clientMessage(ChatColor.GOLD + "WARNING" + ChatColor.WHITE + " : " + msg); }
 
-function err(msg){
-    clientMessage(ChatColor.RED + "ERROR" + ChatColor.WHITE + " : " + msg);
-}
-
-function suc(msg){
-    clientMessage(ChatColor.GREEN + "SUCCESS" + ChatColor.WHITE + " : " + msg);
-}
-
-function info(msg){
-    clientMessage(ChatColor.YELLOW + "INFO" + ChatColor.WHITE + " : " + msg);
-}
-
-function warn(msg){
-    clientMessage(ChatColor.GOLD + "WARNING" + ChatColor.WHITE + " : " + msg);
-}
-
-function cmdTitle(cmd) {
-    clientMessage("=== " + cmd + " ===");
-}
-
-function debug() {
-    clientMessage("§f");
-}
+function cmdTitle(cmd) { clientMessage("=== " + CMD_COLOR + cmd + TXT_COLOR + " ==="); }
 
 function helpPage(pageNo) {
     pageNo = pageNo - 1;
 
-    if (0 <= pageNo && pageNo < pages.length) {
+    if (0 <= pageNo && pageNo < cmdPages.length) {
         if (pageNo === 0) {
-            msg("For more help, type /cmdname help");
+            msg("For more help, type /help <command>");
         }
         msg("\n=== Help Page " + (pageNo+1) + " ===");
-        pages[pageNo].forEach(function(cmd,i,arg) {
+        cmdPages[pageNo].forEach(function(cmd,i,arg) {
             msg("/" + cmd);
         });
     } else {
         err((pageNo + 1) + " is not a valid page number.");
     }
-    msg("\n Type '/help command' for help on each command");
 }
 
 function help(cmd) {
+    msg("");
     cmdTitle(cmd);
     switch (cmd) {
+        case "addeffect" : {
+            msg("Adds potion effect to player");
+            msg("usage: /addeffect <potionEffect> <seconds> [amplification=0]\n   [ambient=false] [showParticles=true]");
+            msg("Type /potions for a list of valid potion effects.")
+            break;
+        }
         case "clear" : {
             msg("Clears the chat log");
             break;
         }
-        case "showcoords" : {
-            msg("Turns on/off player coordinates");
-            break;
-        }
-        case "addeffect" : {
-            msg("Adds potion effect to player");
-            msg("usage: /addeffect potionEffect seconds [amplification=0]\n   [ambient=false] [showParticles=true]");
-            msg("Type /potions for a list of valid potion effects.")
+        case "home" : {
+            msg("Teleports the player to home (if set)");
             break;
         }
         case "potions" : {
@@ -333,22 +333,22 @@ function help(cmd) {
             break;
         }
         case "sethome" : {
-            msg("Sets the destination for the /home command");
+            msg("Sets current location as the destination for the /home command");
             break;
         }
         case "setspawn" : {
             msg("Sets level spawn point");
-            msg("usage: /setspawn [x y z]");
+            msg("usage: /setspawn [x] [y] [z]");
             break;
         }
-        case "home" : {
-            msg("Teleports the player to home (if set)");
+        case "position" : {
+            msg("Turns on/off player position");
             break;
         }
         case "tp" : {
-            msg("Teleports you to specified pos");
+            msg("Teleports you to specified location");
             msg("'safe' warns if you will /tp into a block");
-            msg("usage: /tp x y z [safe]");
+            msg("usage: /tp <x> <y> <z> [safe]");
             break;
         }
     }
