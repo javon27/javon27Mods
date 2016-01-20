@@ -299,10 +299,11 @@ function potions(args) {
 }
 
 function sethome(args) {
-    ModPE.saveData("homePosX", parseInt(Player.getX()));
-    ModPE.saveData("homePosY", parseInt(Player.getY()));
-    ModPE.saveData("homePosZ", parseInt(Player.getZ()));
-    ModPE.saveData("homeSet", 1);
+    var world = Level.getWorldDir();
+    ModPE.saveData(world + "-homePosX", parseInt(Player.getX()));
+    ModPE.saveData(world + "-homePosY", parseInt(Player.getY()));
+    ModPE.saveData(world + "-homePosZ", parseInt(Player.getZ()));
+    ModPE.saveData(world + "-homeSet", 1);
     info("Set Home at X:" + getPlayerX() + ", Y:" + getPlayerY() + ", Z:" + getPlayerZ());
 }
 
@@ -370,13 +371,14 @@ function tp(args) {
 }
 
 function tpHome() {
-    if (ModPE.readData("homeSet") == null) {
+    var world = Level.getWorldDir();
+    if (ModPE.readData(world + "homeSet") == '') {
         err("Home not set. Use /sethome to do so")
         return;
     }
     Entity.setPosition(getPlayerEnt(),
-                       parseFloat(ModPE.readData("homePosX")) + 0.25,
-                       parseFloat(ModPE.readData("homePosY")) + 1.00,
-                       parseFloat(ModPE.readData("homePosZ")) + 0.25);
+                       parseFloat(ModPE.readData(world + "homePosX")) + 0.25,
+                       parseFloat(ModPE.readData(world + "homePosY")) + 1.00,
+                       parseFloat(ModPE.readData(world + "homePosZ")) + 0.25);
     info("Teleported home");
 }
