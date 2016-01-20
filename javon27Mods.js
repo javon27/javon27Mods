@@ -226,16 +226,18 @@ function addeffect(args) {
             return;
         }
         Entity.addEffect(getPlayerEnt(), potionObjs[potions.indexOf(args[0])], parseInt(args[1])*20, 0, false, true);
+        info(args[0] + " effect activated for " + args[1] + " seconds");
     } else {
         err("Type /help <addeffect> for help using this command");
     }
 }
 
-function cClear() {
+function cClear(args) {
     if (args.length == 0) {
-        for (var i = 0; i < 20; i++) {
+        for (var i = 0; i < 100; i++) {
             msg("\n");
         }
+        print("Chat cleared");
     } else {
         msg("Clear WHAT now?")
     }
