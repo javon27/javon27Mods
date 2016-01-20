@@ -5,27 +5,6 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
 ---
 
 ### Working Commands
-### Help
-```
-/help [pageNo]
-```
-* Prints lists of available commands
-* Parameters:
-    * pageNo:
-        * integer, optional
-
-### Clear
-```
-/clear
-```
-* Clears the chat log
-
-### Showcoords
-```
-/showcoords
-```
-* Toggles showing player's current position
-
 ### Addeffect
 ```
 /addeffect potionEffectName durationInSeconds [amplification] [ambient] [showParticles]
@@ -51,6 +30,37 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
         * default value is true
         * Shows particle effects for potion
 
+### Clear
+```
+/clear
+```
+* Clears the chat log
+
+### Help
+```
+/help [pageNo]
+/help [command]
+```
+* Prints lists of available commands
+* Parameters:
+    * pageNo:
+        * integer, optional
+    * command:
+        * case-sensitive string, optional
+        * Name of command to show help for
+
+### Home
+```
+/home
+```
+* Teleports the player to home (if set)
+
+### Position
+```
+/position
+```
+* Toggles showing player's current position
+
 ### Potions
 ```
 /potions
@@ -62,12 +72,6 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
 /sethome
 ```
 * Sets the current position as the destination used by the /home command
-
-### Home
-```
-/home
-```
-* Teleports the player to home (if set)
 
 ### Setspawn
 ```
@@ -97,10 +101,10 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
 
 ### Coming soon...
 ```
-/timeset
+/biome
+/direction
 /fly
 /gamemode
-/ride
-/biome
 /give
-/direction
+/ride
+/time
