@@ -86,59 +86,11 @@ function procCmd(c) {
 
     switch (cmd) {
         case "addeffect" : {
-            if (args.length > 0 && potions.indexOf(args[0]) == -1) {
-                err(args[0] + " is not a valid potion effect");
-            } else if (args.length == 1) {
-                err("Invalid number of parameters. Type /help <addeffect> for usage help");
-            } else if (args.length > 1 && potions.indexOf(args[0]) > -1 && !isNaN(args[1])) {
-                var amplification = 0, ambient = false, showParticles = true;
-
-                if (args.length > 2) {
-                    if (!isNaN(args[2])) {
-                            amplification = args[2];
-                        } else {
-                            err("Type /help <addeffect> for help using this command");
-                            break;
-                        }
-                }
-                if (args.length > 3) {
-                    if (args[3] == "false") {
-                        ambient = false;
-                    } else if (args[3] == "true") {
-                        ambient = true;
-                    } else {
-                        err("Type /help <addeffect> for help using this command");
-                        break;
-                    }
-                }
-                if (args.length > 4) {
-                    if (args[4] == "false") {
-                        showParticles = false;
-                    } else if (args[4] == "true") {
-                        showParticles = true;
-                    } else {
-                        err("Type /help <addeffect> for help using this command");
-                        break;
-                    }
-                }
-                if (args.length > 5) {
-                    err("Type /help <addeffect> for help using this command");
-                    break;
-                }
-                Entity.addEffect(getPlayerEnt(), potionObjs[potions.indexOf(args[0])], parseInt(args[1])*20, 0, false, true);
-            } else {
-                err("Type /help <addeffect> for help using this command");
-            }
+            addeffect(args);
             break;
         }
         case "clear" : {
-            if (args.length == 0) {
-                for (var i = 0; i < 20; i++) {
-                    msg("\n");
-                }
-            } else {
-                msg("Clear WHAT now?")
-            }
+            cClear(args);
             break;
         }
         case "help" : {
@@ -157,56 +109,19 @@ function procCmd(c) {
             break;
         }
         case "home" : {
-            if (ModPE.readData("homeSet") == null) {
-                err("Home not set. Use /sethome to do so")
-                break;
-            }
-            Entity.setPosition(getPlayerEnt(),
-                               parseFloat(ModPE.readData("homePosX")) + 0.25,
-                               parseFloat(ModPE.readData("homePosY")) + 1.00,
-                               parseFloat(ModPE.readData("homePosZ")) + 0.25);
-            info("Teleported home");
+            tpHome();
             break;
         }
         case "potions" : {
-            var tmp = "";
-            potions.forEach(function(potion, index, arg) {
-                tmp = tmp + potion + ", ";
-                if (index == (potions.length - 1) || tmp.length > 70) {
-                    msg(tmp);
-                    tmp = "";
-                }
-            });
+            potions(args);
             break;
         }
         case "sethome" : {
-            ModPE.saveData("homePosX", parseInt(Player.getX()));
-            ModPE.saveData("homePosY", parseInt(Player.getY()));
-            ModPE.saveData("homePosZ", parseInt(Player.getZ()));
-            ModPE.saveData("homeSet", 1);
-            info("Set Home at X:" + getPlayerX() + ", Y:" + getPlayerY() + ", Z:" + getPlayerZ());
+            sethome(args);
             break;
         }
         case "setspawn" : {
-            if (args.length == 3) {
-                var valid = true;
-                args.forEach(function(v,i,r) {
-                    if (isNaN(v)) {
-                        err("Invalid parameters. Type /help <setspawn> for help using this command");
-                        valid = false;
-                    }
-                });
-                if (!valid) {
-                    break;
-                }
-                Level.setSpawn(args[0], args[1], args[2]);
-                info("Spawn set to X:" + args[0] + ", Y:" + args[1] + ", Z:" + args[2]);
-            } else if (args.length == 0) {
-                Level.setSpawn(getPlayerX(), getPlayerY(), getPlayerZ());
-                info("Spawn set to X:" + parseInt(getPlayerX()) + ", Y:" + parseInt(getPlayerY()) + ", Z:" + parseInt(getPlayerZ()));
-            } else {
-                err("What? Type /help <setspawn> for help using this cmd");
-            }
+            setspawn(args);
             break;
         }
         case "position" : {
@@ -214,45 +129,7 @@ function procCmd(c) {
             break;
         }
         case 'tp': {
-            if (args[0] == null || isNaN(args[0]) ||
-                args[1] == null || isNaN(args[1]) ||
-                args[2] == null || isNaN(args[2])) {
-                if((isNaN(args[0]))){
-                    err("Specified X pos in not an integer");
-                }
-                if(args[1] == null){
-                    err("No X pos specified");
-                }
-                if((isNaN(args[1]))){
-                    err("Specified Y pos in not an integer");
-                }
-                if(args[1] == null){
-                    err("No Y pos specified");
-                }
-                if((isNaN(args[2]))){
-                    err("Specified Z pos in not an integer");
-                }
-                if(args[2] == null){
-                    err("No Z pos specified");
-                }
-                break;
-            }
-
-            if(args[3] == 'safe'){
-                if((getBlock(args[0], args[1], args[2]) != null && getBlock(args[0], args[1], args[2]) != 0) ||
-                    (getBlock(args[0], args[1]- 0.5, args[2]) != null && getBlock(args[0], args[1], args[2]) != 0)){
-                    warn("Safe Tp: Specified pos is inside a block");
-                    break;
-                }
-
-                Entity.setPosition(getPlayerEnt(), args[0], args[1], args[2]);
-                info("Safely teleported player to X:" + args[0] + ", Y:" + args[1] + ", Z:" + args[2]);
-                break;
-            }
-
-            Entity.setPosition(getPlayerEnt(), args[0], args[1], args[2]);
-            info("Teleported player to X:" + args[0] + ", Y:" + args[1] + ", Z:" + args[2]);
-
+            tp(args);
             break;
         }
         default : {
@@ -308,6 +185,64 @@ function helpPage(pageNo) {
     msg("For more help, type /help <command>");
 }
 
+function addeffect(args) {
+    if (args.length > 0 && potions.indexOf(args[0]) == -1) {
+        err(args[0] + " is not a valid potion effect");
+    } else if (args.length == 1) {
+        err("Invalid number of parameters. Type /help <addeffect> for usage help");
+    } else if (args.length > 1 && potions.indexOf(args[0]) > -1 && !isNaN(args[1])) {
+        var amplification = 0, ambient = false, showParticles = true;
+
+        if (args.length > 2) {
+            if (!isNaN(args[2])) {
+                    amplification = args[2];
+                } else {
+                    err("Type /help <addeffect> for help using this command");
+                    return;
+                }
+        }
+        if (args.length > 3) {
+            if (args[3] == "false") {
+                ambient = false;
+            } else if (args[3] == "true") {
+                ambient = true;
+            } else {
+                err("Type /help <addeffect> for help using this command");
+                return;
+            }
+        }
+        if (args.length > 4) {
+            if (args[4] == "false") {
+                showParticles = false;
+            } else if (args[4] == "true") {
+                showParticles = true;
+            } else {
+                err("Type /help <addeffect> for help using this command");
+                return;
+            }
+        }
+        if (args.length > 5) {
+            err("Type /help <addeffect> for help using this command");
+            return;
+        }
+        Entity.addEffect(getPlayerEnt(), potionObjs[potions.indexOf(args[0])], parseInt(args[1])*20, 0, false, true);
+        info(args[0] + " effect activated for " + args[1] + " seconds");
+    } else {
+        err("Type /help <addeffect> for help using this command");
+    }
+}
+
+function cClear(args) {
+    if (args.length == 0) {
+        for (var i = 0; i < 100; i++) {
+            msg("\n");
+        }
+        print("Chat cleared");
+    } else {
+        msg("Clear WHAT now?")
+    }
+}
+
 function help(cmd) {
     msg("");
     cmdTitle(cmd);
@@ -350,4 +285,98 @@ function help(cmd) {
             break;
         }
     }
+}
+
+function potions(args) {
+    var tmp = "";
+    potions.forEach(function(potion, index, arg) {
+        tmp = tmp + potion + ", ";
+        if (index == (potions.length - 1) || tmp.length > 70) {
+            msg(tmp);
+            tmp = "";
+        }
+    });
+}
+
+function sethome(args) {
+    ModPE.saveData("homePosX", parseInt(Player.getX()));
+    ModPE.saveData("homePosY", parseInt(Player.getY()));
+    ModPE.saveData("homePosZ", parseInt(Player.getZ()));
+    ModPE.saveData("homeSet", 1);
+    info("Set Home at X:" + getPlayerX() + ", Y:" + getPlayerY() + ", Z:" + getPlayerZ());
+}
+
+function setspawn(args) {
+    if (args.length == 3) {
+        var valid = true;
+        args.forEach(function(v,i,r) {
+            if (isNaN(v)) {
+                err("Invalid parameters. Type /help <setspawn> for help using this command");
+                valid = false;
+            }
+        });
+        if (!valid) {
+            return;
+        }
+        Level.setSpawn(args[0], args[1], args[2]);
+        info("Spawn set to X:" + args[0] + ", Y:" + args[1] + ", Z:" + args[2]);
+    } else if (args.length == 0) {
+        Level.setSpawn(getPlayerX(), getPlayerY(), getPlayerZ());
+        info("Spawn set to X:" + parseInt(getPlayerX()) + ", Y:" + parseInt(getPlayerY()) + ", Z:" + parseInt(getPlayerZ()));
+    } else {
+        err("What? Type /help <setspawn> for help using this cmd");
+    }
+}
+
+function tp(args) {
+    if (args[0] == null || isNaN(args[0]) ||
+        args[1] == null || isNaN(args[1]) ||
+        args[2] == null || isNaN(args[2])) {
+        if((isNaN(args[0]))){
+            err("Specified X pos in not an integer");
+        }
+        if(args[1] == null){
+            err("No X pos specified");
+        }
+        if((isNaN(args[1]))){
+            err("Specified Y pos in not an integer");
+        }
+        if(args[1] == null){
+            err("No Y pos specified");
+        }
+        if((isNaN(args[2]))){
+            err("Specified Z pos in not an integer");
+        }
+        if(args[2] == null){
+            err("No Z pos specified");
+        }
+        return;
+    }
+
+    if(args[3] == 'safe'){
+        if((getBlock(args[0], args[1], args[2]) != null && getBlock(args[0], args[1], args[2]) != 0) ||
+            (getBlock(args[0], args[1]- 0.5, args[2]) != null && getBlock(args[0], args[1], args[2]) != 0)){
+            warn("Safe Tp: Specified pos is inside a block");
+            return;
+        }
+
+        Entity.setPosition(getPlayerEnt(), args[0], args[1], args[2]);
+        info("Safely teleported player to X:" + args[0] + ", Y:" + args[1] + ", Z:" + args[2]);
+        return;
+    }
+
+    Entity.setPosition(getPlayerEnt(), args[0], args[1], args[2]);
+    info("Teleported player to X:" + args[0] + ", Y:" + args[1] + ", Z:" + args[2]);
+}
+
+function tpHome() {
+    if (ModPE.readData("homeSet") == null) {
+        err("Home not set. Use /sethome to do so")
+        return;
+    }
+    Entity.setPosition(getPlayerEnt(),
+                       parseFloat(ModPE.readData("homePosX")) + 0.25,
+                       parseFloat(ModPE.readData("homePosY")) + 1.00,
+                       parseFloat(ModPE.readData("homePosZ")) + 0.25);
+    info("Teleported home");
 }
