@@ -111,7 +111,7 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
         * can also use the following named variables:
             * dawn = 0
             * day = 1000
-            * midday = 6000
+            * noon = 6000
             * dusk = 12000
             * night = 14000
             * midnight = 18000
