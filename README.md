@@ -49,6 +49,12 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
         * case-sensitive string, optional
         * Name of command to show help for
 
+### Direction
+```
+/direction
+```
+* Toggles showing the direction player is facing
+
 ### Home
 ```
 /home

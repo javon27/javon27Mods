@@ -1,8 +1,8 @@
 // Each line is a page for the help menu
 var cmdPages = [
-    ["addeffect", "clear", "help", "home", "position"],
-    ["potions", "sethome", "setspawn", "tp"],
-    ["biome", "direction", "fly", "gamemode", "give"],
+    ["addeffect", "clear", "direction", "help", "home"],
+    ["position", "potions", "sethome", "setspawn", "tp"],
+    ["biome", "fly", "gamemode", "give"],
     ["ride", "time"]
 ];
 
@@ -11,6 +11,9 @@ var position = false;
 
 // Show game time if true
 var showTime = false;
+
+// Show direction facing if true;
+var direction = false;
 
 // Shorten a few color names
 var CMD_COLOR = ChatColor.YELLOW;           // Color for command text
@@ -77,6 +80,30 @@ function newLevel() {
 
 function modTick() {
     var msg = "";
+    if (direction) {
+        var yaw = getYaw() % 360;
+        while (yaw < 0) {
+            yaw += 360;
+        }
+        if (yaw >= 337.5 && yaw < 22.5) {
+            yaw = "W";
+        } else if (yaw < 67.5) {
+            yaw = "NW";
+        } else if (yaw < 112.5) {
+            yaw = "N";
+        } else if (yaw < 157.5) {
+            yaw = "NE";
+        } else if (yaw < 202.5) {
+            yaw = "E";
+        } else if (yaw < 247.5) {
+            yaw = "SE";
+        } else if (yaw < 292.5) {
+            yaw = "S";
+        } else if (yaw < 337.5) {
+            yaw = "SW";
+        }
+        msg += "D: " + yaw;
+    }
     if (position) {
         msg += "\n[x: " + Math.round(getPlayerX()) + " y: "+Math.round(getPlayerY()) + " z: " + Math.round(getPlayerZ()) + "]";
     }
@@ -114,6 +141,10 @@ function procCmd(c) {
         }
         case "clear" : {
             cClear(args);
+            break;
+        }
+        case "direction" : {
+            direction = !direction;
             break;
         }
         case "help" : {
