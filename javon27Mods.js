@@ -372,13 +372,13 @@ function tp(args) {
 
 function tpHome() {
     var world = Level.getWorldDir();
-    if (ModPE.readData(world + "homeSet") == '') {
+    if (ModPE.readData(world + "-homeSet") == '') {
         err("Home not set. Use /sethome to do so")
         return;
     }
     Entity.setPosition(getPlayerEnt(),
-                       parseFloat(ModPE.readData(world + "homePosX")) + 0.25,
-                       parseFloat(ModPE.readData(world + "homePosY")) + 1.00,
-                       parseFloat(ModPE.readData(world + "homePosZ")) + 0.25);
+                       parseFloat(ModPE.readData(world + "-homePosX")) + 0.25,
+                       parseFloat(ModPE.readData(world + "-homePosY")) + 1.00,
+                       parseFloat(ModPE.readData(world + "-homePosZ")) + 0.25);
     info("Teleported home");
 }
