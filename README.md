@@ -99,12 +99,39 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
         * safe, optional
         * Aborts teleporting if coordinates are inside a block
 
+### Time
+```
+/time set timeToSet
+/time add timeToAdd
+/time show
+```
+* Parameters:
+    * set: timeToSet
+        * integer, required
+        * can also use the following named variables:
+            * dawn = 0
+            * day = 1000
+            * midday = 6000
+            * dusk = 12000
+            * night = 14000
+            * midnight = 18000
+        * Changes the time to the given time
+    * add: timeToAdd
+        * integer, required
+        * Number of ticks to add to the time
+    * show
+        * Toggles showing game ticks
+
+
 ### Coming soon...
 ```
 /biome
+/explode
 /direction
 /fly
 /gamemode
 /give
+/heal
+/kill
 /ride
 /time

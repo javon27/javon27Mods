@@ -1,14 +1,16 @@
 // Each line is a page for the help menu
 var cmdPages = [
-    ["clear", "position", "addeffect", "potions", "direction"],
-    ["sethome", "setspawn", "timeset", "tp"],
-    ["effect", "explode", "fly", "forward", "gamemode"],
-    ["gamespeed", "biome", "give", "heal", "home"],
-    ["itemdata", "joinserver", "kill", "ride", "sethealth"]
+    ["addeffect", "clear", "help", "home", "position"],
+    ["potions", "sethome", "setspawn", "tp"],
+    ["biome", "direction", "fly", "gamemode", "give"],
+    ["ride", "time"]
 ];
 
 // Show player coordinates if set to true
 var position = false;
+
+// Show game time if true
+var showTime = false;
 
 // Shorten a few color names
 var CMD_COLOR = ChatColor.YELLOW;           // Color for command text
@@ -74,9 +76,30 @@ function newLevel() {
 }
 
 function modTick() {
+    var msg = "";
     if (position) {
-        ModPE.showTipMessage("\n[x: "+Math.round(getPlayerX())+" y: "+Math.round(getPlayerY())+" z: "+Math.round(getPlayerZ())+"]");
+        msg += "\n[x: " + Math.round(getPlayerX()) + " y: "+Math.round(getPlayerY()) + " z: " + Math.round(getPlayerZ()) + "]";
     }
+    if (showTime) {
+        var ticks = Level.getTime();
+        ticks %= 24000;
+        var hour = parseInt(ticks/1000) + 6;
+        var meridiem = "pm";
+        if (hour < 12) {
+            meridiem = "am";
+        }
+        if ((hour %= 12) == 0) {
+            hour = 12;
+        }
+        ticks %= 1000;
+        var minutes = parseInt(ticks * 60 / 1000);
+        minutes = ("0" + minutes).slice(-2);
+        ticks %= 1000 / 60;
+        var seconds = parseInt(ticks / (1000/60/60));
+        seconds = ("0" + seconds).slice(-2);
+        msg += "\nT: " + hour + ":" + minutes + ":" + seconds + " " + meridiem;
+    }
+    ModPE.showTipMessage(msg);
 }
 
 function procCmd(c) {
@@ -99,7 +122,7 @@ function procCmd(c) {
                 pageNo = 1;
             }
             else if (isNaN(args[0])) {
-                help(args[0]);
+                help(args);
                 break;
             }
             else {
@@ -110,6 +133,10 @@ function procCmd(c) {
         }
         case "home" : {
             tpHome();
+            break;
+        }
+        case "position" : {
+            position = !position;
             break;
         }
         case "potions" : {
@@ -124,8 +151,8 @@ function procCmd(c) {
             setspawn(args);
             break;
         }
-        case "position" : {
-            position = !position;
+        case "time" : {
+            time(args);
             break;
         }
         case 'tp': {
@@ -243,7 +270,8 @@ function cClear(args) {
     }
 }
 
-function help(cmd) {
+function help(args) {
+    var cmd = args[0];
     msg("");
     cmdTitle(cmd);
     switch (cmd) {
@@ -276,6 +304,23 @@ function help(cmd) {
         }
         case "position" : {
             msg("Turns on/off player position");
+            break;
+        }
+        case "time" : {
+            if (args.length == 1) {
+                msg("Command to alter game time");
+                msg("Type /help <time> <set> or /help <time> <add> for more help");
+            } else if (args[1] == "set") {
+                msg("Sets the time to the given integer value");
+                msg("The following text values are also supported:");
+                msg("dawn, day, noon, dusk, night, midnight");
+                msg("usage: /time <set> <t>");
+            } else if (args[1] == "add") {
+                msg("Add the given number of ticks to the time");
+                msg("usage: /time <add> <t>");
+            } else {
+                err("Type /help <time> for valid help options")
+            }
             break;
         }
         case "tp" : {
@@ -325,7 +370,68 @@ function setspawn(args) {
         Level.setSpawn(getPlayerX(), getPlayerY(), getPlayerZ());
         info("Spawn set to X:" + parseInt(getPlayerX()) + ", Y:" + parseInt(getPlayerY()) + ", Z:" + parseInt(getPlayerZ()));
     } else {
-        err("What? Type /help <setspawn> for help using this cmd");
+        err("What? Type /help <setspawn> for help using this command");
+    }
+}
+
+function time(args) {
+    if (args.length == 0 || args.length > 2) {
+        err("Invalid number of parameters. Type /help <time> for help using this command");
+        return;
+    } else if (args.length == 2) {
+        if (args[0] == "set") {
+            var t = args[1];
+            switch (t) {
+                case "dawn" : {
+                    t = 0;
+                    break;
+                }
+                case "day" : {
+                    t = 1000;
+                    break;
+                }
+                case "noon" : {
+                    t = 6000;
+                    break;
+                }
+                case "dusk" : {
+                    t = 12000;
+                    break;
+                }
+                case "night" : {
+                    t = 14000;
+                    break;
+                }
+                case "midnight" : {
+                    t = 18000;
+                    break;
+                }
+                default : {
+                    if (isNaN(t = parseInt(t))) {
+                        err("Invalid parameter for /time set. Type /help <time> <set> for help using this command");
+                        return;
+                    }
+                }
+            }
+            Level.setTime(t);
+            info("Time set to " + t);
+        } else if (args[0] == "add") {
+            var t = Level.getTime();
+            if (!isNaN(parseInt(args[1]))) {
+                t += parseInt(args[1]);
+                Level.setTime(t);
+                info("Time set to " + t);
+            } else {
+                err("Invalid parameter for /time add. Type /help <time> <add> for help using this command");
+                return;
+            }
+        } else {
+            err("Type /help <time> for help using this command");
+        }
+    } else {
+        if (args[0] == "show") {
+            showTime = !showTime;
+        }
     }
 }
 
