@@ -85,7 +85,7 @@ function modTick() {
         while (yaw < 0) {
             yaw += 360;
         }
-        if (yaw >= 337.5 && yaw < 22.5) {
+        if (yaw >= 337.5 || yaw < 22.5) {
             yaw = "W";
         } else if (yaw < 67.5) {
             yaw = "NW";
