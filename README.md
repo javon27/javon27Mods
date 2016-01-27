@@ -1,6 +1,8 @@
 # javon27Mods
 ## Minecraft Pocket Edition Mod Commands
 
+#### v0.5.8
+
 This script is my attempt to add commands to Minecraft Pocket Edition. Tested on Android MCPE 0.13.1.
 ---
 
