@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>javon27mods by javon27</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>javon27mods</h1>
+        <h2>Minecraft Pocket Edition Mod Commands</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/javon27/javon27Mods/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/javon27/javon27Mods/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/javon27/javon27Mods" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="javon27mods" class="anchor" href="#javon27mods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>javon27Mods</h1>
+
+<h2>
+<a id="minecraft-pocket-edition-mod-commands" class="anchor" href="#minecraft-pocket-edition-mod-commands" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Minecraft Pocket Edition Mod Commands</h2>
+
+<h2>
+<a id="this-script-is-my-attempt-to-add-commands-to-minecraft-pocket-edition-tested-on-android-mcpe-0131" class="anchor" href="#this-script-is-my-attempt-to-add-commands-to-minecraft-pocket-edition-tested-on-android-mcpe-0131" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>This script is my attempt to add commands to Minecraft Pocket Edition. Tested on Android MCPE 0.13.1.</h2>
+
+<h3>
+<a id="working-commands" class="anchor" href="#working-commands" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working Commands</h3>
+
+<h3>
+<a id="addeffect" class="anchor" href="#addeffect" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Addeffect</h3>
+
+<pre><code>/addeffect potionEffectName durationInSeconds [amplification [ambient [showParticles]]]
+</code></pre>
+
+<ul>
+<li>Add potion effect to self for the duration set.</li>
+<li>Parameters:
+
+<ul>
+<li>potionEffectName:
+
+<ul>
+<li>case-sensitive string, required</li>
+<li>Name of effect. For a list of valid names, see <a href="#potions">/potions</a>
+</li>
+</ul>
+</li>
+<li>durationInSeconds:
+
+<ul>
+<li>integer, required</li>
+<li>Anything greater than zero</li>
+</ul>
+</li>
+<li>amplification:
+
+<ul>
+<li>integer, optional</li>
+<li>default value is 0</li>
+<li>(Not really sure what this does yet...)</li>
+</ul>
+</li>
+<li>ambient:
+
+<ul>
+<li>boolean, optional</li>
+<li>default value is false</li>
+<li>(Not sure about this either...)</li>
+</ul>
+</li>
+<li>showParticles:
+
+<ul>
+<li>boolean, optional</li>
+<li>default value is true</li>
+<li>Shows particle effects for potion</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="clear" class="anchor" href="#clear" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Clear</h3>
+
+<pre><code>/clear
+</code></pre>
+
+<ul>
+<li>Clears the chat log</li>
+</ul>
+
+<h3>
+<a id="help" class="anchor" href="#help" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Help</h3>
+
+<pre><code>/help [pageNo]
+/help [command]
+</code></pre>
+
+<ul>
+<li>Prints lists of available commands</li>
+<li>Parameters:
+
+<ul>
+<li>pageNo:
+
+<ul>
+<li>integer, optional</li>
+</ul>
+</li>
+<li>command:
+
+<ul>
+<li>case-sensitive string, optional</li>
+<li>Name of command to show help for</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="direction" class="anchor" href="#direction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Direction</h3>
+
+<pre><code>/direction
+</code></pre>
+
+<ul>
+<li>Toggles showing the direction player is facing</li>
+</ul>
+
+<h3>
+<a id="home" class="anchor" href="#home" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Home</h3>
+
+<pre><code>/home
+</code></pre>
+
+<ul>
+<li>Teleports the player to home (if set)</li>
+</ul>
+
+<h3>
+<a id="position" class="anchor" href="#position" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Position</h3>
+
+<pre><code>/position
+</code></pre>
+
+<ul>
+<li>Toggles showing player's current position</li>
+</ul>
+
+<h3>
+<a id="potions" class="anchor" href="#potions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Potions</h3>
+
+<pre><code>/potions
+</code></pre>
+
+<ul>
+<li>Shows a list of valid potion effect names for use with /addeffect command</li>
+</ul>
+
+<h3>
+<a id="sethome" class="anchor" href="#sethome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sethome</h3>
+
+<pre><code>/sethome
+</code></pre>
+
+<ul>
+<li>Sets the current position as the destination used by the /home command</li>
+</ul>
+
+<h3>
+<a id="setspawn" class="anchor" href="#setspawn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setspawn</h3>
+
+<pre><code>/setspawn [x y z]
+</code></pre>
+
+<ul>
+<li>Sets level spawn point. If no arguments, uses player current position</li>
+<li>Parameters:
+
+<ul>
+<li>x y z:
+
+<ul>
+<li>integers, optional</li>
+<li>Coordinates to set as level spawn</li>
+<li>x and z are horizontal coordinates</li>
+<li>y is vertical coordinate</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="teleport" class="anchor" href="#teleport" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Teleport</h3>
+
+<pre><code>/tp x y z [safe]
+</code></pre>
+
+<ul>
+<li>Teleports player to specified location</li>
+<li>Parameters:
+
+<ul>
+<li>x y z:
+
+<ul>
+<li>integers, required</li>
+<li>x anx z are horizontal coordinates</li>
+<li>y is vertical coordinate</li>
+</ul>
+</li>
+<li>safe:
+
+<ul>
+<li>safe, optional</li>
+<li>Aborts teleporting if coordinates are inside a block</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="time" class="anchor" href="#time" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Time</h3>
+
+<pre><code>/time set timeToSet
+/time add timeToAdd
+/time show
+</code></pre>
+
+<ul>
+<li>Parameters:
+
+<ul>
+<li>set: timeToSet
+
+<ul>
+<li>integer, required</li>
+<li>can also use the following named variables:
+
+<ul>
+<li>dawn = 0</li>
+<li>day = 1000</li>
+<li>noon = 6000</li>
+<li>dusk = 12000</li>
+<li>night = 14000</li>
+<li>midnight = 18000</li>
+</ul>
+</li>
+<li>Changes the time to the given time</li>
+</ul>
+</li>
+<li>add: timeToAdd
+
+<ul>
+<li>integer, required</li>
+<li>Number of ticks to add to the time</li>
+</ul>
+</li>
+<li>show
+
+<ul>
+<li>Toggles showing game ticks</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="coming-soon" class="anchor" href="#coming-soon" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Coming soon...</h3>
+
+<pre><code>/biome
+/explode
+/direction
+/fly
+/gamemode
+/give
+/direction
+</code></pre>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
