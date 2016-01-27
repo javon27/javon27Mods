@@ -5,27 +5,6 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
 ---
 
 ### Working Commands
-### Help
-```
-/help [pageNo]
-```
-* Prints lists of available commands
-* Parameters:
-    * pageNo:
-        * integer, optional
-
-### Clear
-```
-/clear
-```
-* Clears the chat log
-
-### Showcoords
-```
-/showcoords
-```
-* Toggles showing player's current position
-
 ### Addeffect
 ```
 /addeffect potionEffectName durationInSeconds [amplification [ambient [showParticles]]]
@@ -51,6 +30,43 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
         * default value is true
         * Shows particle effects for potion
 
+### Clear
+```
+/clear
+```
+* Clears the chat log
+
+### Help
+```
+/help [pageNo]
+/help [command]
+```
+* Prints lists of available commands
+* Parameters:
+    * pageNo:
+        * integer, optional
+    * command:
+        * case-sensitive string, optional
+        * Name of command to show help for
+
+### Direction
+```
+/direction
+```
+* Toggles showing the direction player is facing
+
+### Home
+```
+/home
+```
+* Teleports the player to home (if set)
+
+### Position
+```
+/position
+```
+* Toggles showing player's current position
+
 ### Potions
 ```
 /potions
@@ -62,12 +78,6 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
 /sethome
 ```
 * Sets the current position as the destination used by the /home command
-
-### Home
-```
-/home
-```
-* Teleports the player to home (if set)
 
 ### Setspawn
 ```
@@ -95,12 +105,36 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
         * safe, optional
         * Aborts teleporting if coordinates are inside a block
 
+### Time
+```
+/time set timeToSet
+/time add timeToAdd
+/time show
+```
+* Parameters:
+    * set: timeToSet
+        * integer, required
+        * can also use the following named variables:
+            * dawn = 0
+            * day = 1000
+            * noon = 6000
+            * dusk = 12000
+            * night = 14000
+            * midnight = 18000
+        * Changes the time to the given time
+    * add: timeToAdd
+        * integer, required
+        * Number of ticks to add to the time
+    * show
+        * Toggles showing game ticks
+
+
 ### Coming soon...
 ```
-/timeset
+/biome
+/explode
+/direction
 /fly
 /gamemode
-/ride
-/biome
 /give
 /direction

@@ -1,14 +1,19 @@
 // Each line is a page for the help menu
 var cmdPages = [
-    ["clear", "position", "addeffect", "potions", "direction"],
-    ["sethome", "setspawn", "timeset", "tp"],
-    ["effect", "explode", "fly", "forward", "gamemode"],
-    ["gamespeed", "biome", "give", "heal", "home"],
-    ["itemdata", "joinserver", "kill", "ride", "sethealth"]
+    ["addeffect", "clear", "direction", "help", "home"],
+    ["position", "potions", "sethome", "setspawn", "tp"],
+    ["biome", "fly", "gamemode", "give"],
+    ["ride", "time"]
 ];
 
 // Show player coordinates if set to true
 var position = false;
+
+// Show game time if true
+var showTime = false;
+
+// Show direction facing if true;
+var direction = false;
 
 // Shorten a few color names
 var CMD_COLOR = ChatColor.YELLOW;           // Color for command text
@@ -74,9 +79,54 @@ function newLevel() {
 }
 
 function modTick() {
-    if (position) {
-        ModPE.showTipMessage("\n[x: "+Math.round(getPlayerX())+" y: "+Math.round(getPlayerY())+" z: "+Math.round(getPlayerZ())+"]");
+    var msg = "";
+    if (direction) {
+        var yaw = getYaw() % 360;
+        while (yaw < 0) {
+            yaw += 360;
+        }
+        if (yaw >= 337.5 || yaw < 22.5) {
+            yaw = "W";
+        } else if (yaw < 67.5) {
+            yaw = "NW";
+        } else if (yaw < 112.5) {
+            yaw = "N";
+        } else if (yaw < 157.5) {
+            yaw = "NE";
+        } else if (yaw < 202.5) {
+            yaw = "E";
+        } else if (yaw < 247.5) {
+            yaw = "SE";
+        } else if (yaw < 292.5) {
+            yaw = "S";
+        } else if (yaw < 337.5) {
+            yaw = "SW";
+        }
+        msg += "D: " + yaw;
     }
+    if (position) {
+        msg += "\n[x: " + Math.round(getPlayerX()) + " y: "+Math.round(getPlayerY()) + " z: " + Math.round(getPlayerZ()) + "]";
+    }
+    if (showTime) {
+        var ticks = Level.getTime();
+        ticks %= 24000;
+        var hour = parseInt(ticks/1000) + 6;
+        var meridiem = "pm";
+        if (hour < 12) {
+            meridiem = "am";
+        }
+        if ((hour %= 12) == 0) {
+            hour = 12;
+        }
+        ticks %= 1000;
+        var minutes = parseInt(ticks * 60 / 1000);
+        minutes = ("0" + minutes).slice(-2);
+        ticks %= 1000 / 60;
+        var seconds = parseInt(ticks / (1000/60/60));
+        seconds = ("0" + seconds).slice(-2);
+        msg += "\nT: " + hour + ":" + minutes + ":" + seconds + " " + meridiem;
+    }
+    ModPE.showTipMessage(msg);
 }
 
 function procCmd(c) {
@@ -93,13 +143,17 @@ function procCmd(c) {
             cClear(args);
             break;
         }
+        case "direction" : {
+            direction = !direction;
+            break;
+        }
         case "help" : {
             var pageNo;
             if (args.length == 0) {
                 pageNo = 1;
             }
             else if (isNaN(args[0])) {
-                help(args[0]);
+                help(args);
                 break;
             }
             else {
@@ -110,6 +164,10 @@ function procCmd(c) {
         }
         case "home" : {
             tpHome();
+            break;
+        }
+        case "position" : {
+            position = !position;
             break;
         }
         case "potions" : {
@@ -124,8 +182,8 @@ function procCmd(c) {
             setspawn(args);
             break;
         }
-        case "position" : {
-            position = !position;
+        case "time" : {
+            time(args);
             break;
         }
         case 'tp': {
@@ -243,7 +301,8 @@ function cClear(args) {
     }
 }
 
-function help(cmd) {
+function help(args) {
+    var cmd = args[0];
     msg("");
     cmdTitle(cmd);
     switch (cmd) {
@@ -278,6 +337,23 @@ function help(cmd) {
             msg("Turns on/off player position");
             break;
         }
+        case "time" : {
+            if (args.length == 1) {
+                msg("Command to alter game time");
+                msg("Type /help <time> <set> or /help <time> <add> for more help");
+            } else if (args[1] == "set") {
+                msg("Sets the time to the given integer value");
+                msg("The following text values are also supported:");
+                msg("dawn, day, noon, dusk, night, midnight");
+                msg("usage: /time <set> <t>");
+            } else if (args[1] == "add") {
+                msg("Add the given number of ticks to the time");
+                msg("usage: /time <add> <t>");
+            } else {
+                err("Type /help <time> for valid help options")
+            }
+            break;
+        }
         case "tp" : {
             msg("Teleports you to specified location");
             msg("'safe' warns if you will /tp into a block");
@@ -299,10 +375,11 @@ function potions(args) {
 }
 
 function sethome(args) {
-    ModPE.saveData("homePosX", parseInt(Player.getX()));
-    ModPE.saveData("homePosY", parseInt(Player.getY()));
-    ModPE.saveData("homePosZ", parseInt(Player.getZ()));
-    ModPE.saveData("homeSet", 1);
+    var world = Level.getWorldDir();
+    ModPE.saveData(world + "-homePosX", parseInt(Player.getX()));
+    ModPE.saveData(world + "-homePosY", parseInt(Player.getY()));
+    ModPE.saveData(world + "-homePosZ", parseInt(Player.getZ()));
+    ModPE.saveData(world + "-homeSet", 1);
     info("Set Home at X:" + getPlayerX() + ", Y:" + getPlayerY() + ", Z:" + getPlayerZ());
 }
 
@@ -324,7 +401,68 @@ function setspawn(args) {
         Level.setSpawn(getPlayerX(), getPlayerY(), getPlayerZ());
         info("Spawn set to X:" + parseInt(getPlayerX()) + ", Y:" + parseInt(getPlayerY()) + ", Z:" + parseInt(getPlayerZ()));
     } else {
-        err("What? Type /help <setspawn> for help using this cmd");
+        err("What? Type /help <setspawn> for help using this command");
+    }
+}
+
+function time(args) {
+    if (args.length == 0 || args.length > 2) {
+        err("Invalid number of parameters. Type /help <time> for help using this command");
+        return;
+    } else if (args.length == 2) {
+        if (args[0] == "set") {
+            var t = args[1];
+            switch (t) {
+                case "dawn" : {
+                    t = 0;
+                    break;
+                }
+                case "day" : {
+                    t = 1000;
+                    break;
+                }
+                case "noon" : {
+                    t = 6000;
+                    break;
+                }
+                case "dusk" : {
+                    t = 12000;
+                    break;
+                }
+                case "night" : {
+                    t = 14000;
+                    break;
+                }
+                case "midnight" : {
+                    t = 18000;
+                    break;
+                }
+                default : {
+                    if (isNaN(t = parseInt(t))) {
+                        err("Invalid parameter for /time set. Type /help <time> <set> for help using this command");
+                        return;
+                    }
+                }
+            }
+            Level.setTime(t);
+            info("Time set to " + t);
+        } else if (args[0] == "add") {
+            var t = Level.getTime();
+            if (!isNaN(parseInt(args[1]))) {
+                t += parseInt(args[1]);
+                Level.setTime(t);
+                info("Time set to " + t);
+            } else {
+                err("Invalid parameter for /time add. Type /help <time> <add> for help using this command");
+                return;
+            }
+        } else {
+            err("Type /help <time> for help using this command");
+        }
+    } else {
+        if (args[0] == "show") {
+            showTime = !showTime;
+        }
     }
 }
 
@@ -370,13 +508,14 @@ function tp(args) {
 }
 
 function tpHome() {
-    if (ModPE.readData("homeSet") == null) {
+    var world = Level.getWorldDir();
+    if (ModPE.readData(world + "-homeSet") == '') {
         err("Home not set. Use /sethome to do so")
         return;
     }
     Entity.setPosition(getPlayerEnt(),
-                       parseFloat(ModPE.readData("homePosX")) + 0.25,
-                       parseFloat(ModPE.readData("homePosY")) + 1.00,
-                       parseFloat(ModPE.readData("homePosZ")) + 0.25);
+                       parseFloat(ModPE.readData(world + "-homePosX")) + 0.25,
+                       parseFloat(ModPE.readData(world + "-homePosY")) + 1.00,
+                       parseFloat(ModPE.readData(world + "-homePosZ")) + 0.25);
     info("Teleported home");
 }
