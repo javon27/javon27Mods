@@ -28,7 +28,7 @@ This script is my attempt to add commands to Minecraft Pocket Edition. Tested on
 
 ### Addeffect
 ```
-/addeffect potionEffectName durationInSeconds [amplification] [ambient] [showParticles]
+/addeffect potionEffectName durationInSeconds [amplification [ambient [showParticles]]]
 ```
 * Add potion effect to self for the duration set.
 * Parameters:
