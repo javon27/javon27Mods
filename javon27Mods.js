@@ -102,10 +102,10 @@ function modTick() {
         } else if (yaw < 337.5) {
             yaw = "SW";
         }
-        msg += "D: " + yaw;
+        msg += "D: " + yaw + "  ";
     }
     if (position) {
-        msg += "\n[x: " + Math.round(getPlayerX()) + " y: "+Math.round(getPlayerY()) + " z: " + Math.round(getPlayerZ()) + "]";
+        msg += "[x: " + Math.round(getPlayerX()) + " y: "+Math.round(getPlayerY()) + " z: " + Math.round(getPlayerZ()) + "]";
     }
     if (showTime) {
         var ticks = Level.getTime();
