@@ -1,3 +1,6 @@
+// javon27Mods by javon27
+// Version 0.5.8
+
 // Each line is a page for the help menu
 var cmdPages = [
     ["addeffect", "clear", "direction", "help", "home"],
