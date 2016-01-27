@@ -1,7 +1,8 @@
 body {
   margin: 0;
   padding: 0;
-  background: #151515 url("../images/bkg.png") 0 0;
+  background: #71460b url("../images/dirt.jpg") 0 0;
+    background-attachment: fixed;
   color: #eaeaea;
   font: 16px;
   line-height: 1.5;
@@ -12,8 +13,10 @@ body {
 
 .container {
   width: 90%;
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
+  padding: 40px;
+  background: #8d5100 url("../images/bkg.png") 0 0;
 }
 
 section {
@@ -49,7 +52,7 @@ header h1 {
   margin: 0 0 0 -40px;
   font-weight: bold;
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  color: #b5e853;
+  color: #70a82e;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1),
                0 0 5px rgba(181, 232, 83, 0.1),
                0 0 10px rgba(181, 232, 83, 0.1);
@@ -66,6 +69,7 @@ header h2 {
   font-size: 18px;
   font-weight: 300;
   color: #666;
+  text-align: center;
 }
 
 #downloads .btn {
@@ -88,11 +92,16 @@ section img {
 h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  color: #b5e853;
+  color: #70a82e;
   letter-spacing: -0.03em;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1),
                0 0 5px rgba(181, 232, 83, 0.1),
                0 0 10px rgba(181, 232, 83, 0.1);
+}
+
+#logoHeader {
+    display: block;
+    margin: auto;
 }
 
 #main_content h1 {
